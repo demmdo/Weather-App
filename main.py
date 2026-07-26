@@ -3,10 +3,13 @@ import customtkinter as ctk
 import threading
 import json
 import os
+import webbrowser
 
 
 
 app = ctk.CTk()
+
+
 
 def toggleAppearanceMode():
     if changeAppearanceMode.get() == 0:
@@ -148,11 +151,6 @@ def checkSystem():
         degrees = "°F"
         changeFromMetric.set(True)
 
-        
-
-
-
-
 
 
 if os.path.exists("config/config.json"):
@@ -168,6 +166,9 @@ if os.path.exists("config/API.config.json"):
     with open("config/API.config.json", "r") as f:
         config = json.load(f)
         APIKey = config.get("api_key")
+
+def openWeatherLink(event):
+    webbrowser.open("https://openweathermap.org/api")
 
 def openAPIPopup():
     global popup
@@ -190,10 +191,14 @@ def openAPIPopup():
 
 
     APIlabel = ctk.CTkLabel(popup, text="Enter your API key:")
-    APIlabel.pack(pady=20)
+    APIlabel.pack(pady=(15, 5))
+
+    APIKeyGet = ctk.CTkLabel(popup, text="How to get free API key", text_color="#3366d6", cursor="hand2")
+    APIKeyGet.bind("<Button-1>", openWeatherLink)
+    APIKeyGet.pack(pady=5)
 
     APIEntry = ctk.CTkEntry(popup, placeholder_text="API key...")
-    APIEntry.pack(pady=10)
+    APIEntry.pack(pady=0)
 
     APIErrorFrame = ctk.CTkFrame(popup, width=450, height=20)
     APIErrorLabel = ctk.CTkLabel(APIErrorFrame, text="", font=("Arial", 14))
@@ -224,7 +229,6 @@ def openAPIPopup():
 
         if APIcode == 401:
             def show_error():
-                print("401")
                 APIErrorFrame.pack()
                 APIErrorLabel.configure(text="Couldn't access the API key!")
                 APIErrorLabel.pack(padx=10)
