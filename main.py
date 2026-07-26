@@ -20,14 +20,14 @@ def toggleAppearanceMode():
 
 
     try:
-        with open("config.json", "r") as f:
+        with open("config/config.json", "r") as f:
             config = json.load(f)
     except:
         config = {}
 
     config["appearance"] = mode
 
-    with open("config.json", "w") as f:
+    with open("config/config.json", "w") as f:
         json.dump(config, f, indent=4)
 
 
@@ -48,14 +48,14 @@ def toggleFromMetric():
     checkSystem()
 
     try:
-        with open("config.json", "r") as f:
+        with open("config/config.json", "r") as f:
             config = json.load(f)
     except:
         config = {}
 
     config["system"] = system
 
-    with open("config.json", "w") as f:
+    with open("config/config.json", "w") as f:
         json.dump(config, f, indent=4)
 
     if resultPage.winfo_ismapped():
@@ -71,8 +71,8 @@ changeAppearanceMode.pack(anchor="w", padx=10, pady=5)
 changeFromMetric = ctk.CTkSwitch(switchFrame, text="Change to Imperial System", command=toggleFromMetric)
 changeFromMetric.pack(anchor="w", padx=10, pady=5)
 
-if os.path.exists("config.json"):
-    with open("config.json", "r") as f:
+if os.path.exists("config/config.json"):
+    with open("config/config.json", "r") as f:
         config = json.load(f)
         mode = config.get("appearance")
     if mode == "light":
@@ -155,8 +155,8 @@ def checkSystem():
 
 
 
-if os.path.exists("config.json"):
-    with open("config.json", "r") as f:
+if os.path.exists("config/config.json"):
+    with open("config/config.json", "r") as f:
         config = json.load(f)
         system = config.get("system", "metric")
     checkSystem()
@@ -164,8 +164,8 @@ if os.path.exists("config.json"):
 searchPage = ctk.CTkFrame(app, fg_color="transparent")
 resultPage = ctk.CTkFrame(app, fg_color="transparent")
 
-if os.path.exists("config.json"):
-    with open("config.json", "r") as f:
+if os.path.exists("config/API.config.json"):
+    with open("config/API.config.json", "r") as f:
         config = json.load(f)
         APIKey = config.get("api_key")
 
@@ -212,14 +212,14 @@ def openAPIPopup():
             APIKey = APIEntry.get()
 
             try:
-                with open("config.json", "r") as f:
+                with open("config/API.config.json", "r") as f:
                     config = json.load(f)
             except:
                 config = {}
 
             config["api_key"] = APIKey
 
-            with open("config.json", "w") as f:
+            with open("config/API.config.json", "w") as f:
                 json.dump(config, f, indent=4)
 
         if APIcode == 401:
@@ -260,9 +260,6 @@ def openAPIPopup():
 
 if not APIKey:
     app.after(500, openAPIPopup)
-
-
-
 
 
 
@@ -332,8 +329,7 @@ def searchWeather():
 
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={APIKey}&units={system}&lang=en"
 
-    print(system)
-    print(url)
+
     try:
         response = requests.get(url, timeout=5)
         APIcode = response.status_code
